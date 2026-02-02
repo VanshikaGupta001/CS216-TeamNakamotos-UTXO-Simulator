@@ -4,8 +4,17 @@
 #include <set>
 #include <algorithm> 
 #include <map>
-#include "utxo_manager.h"
-#include "transaction.h"
+
+#ifndef UTXO_MANAGER
+#define UTXO_MANAGER
+#include"utxo_manager.h"
+#endif
+
+#ifndef TRANSACTION
+#define TRANSACTION
+#include"transaction.h"
+#endif
+
 
 using namespace std;
 

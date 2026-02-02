@@ -1,0 +1,98 @@
+Genesis UTXOs initialized successfully.
+
+=== Bitcoin Transaction Simulator ===
+1. Create new transaction
+2. View UTXO set
+3. View mempool
+4. Mine block
+5. Run test scenarios
+6. Exit
+Enter choice: 1
+Enter sender: Bob
+Available balance: 30 BTC
+Enter recipient: Alice
+Enter amount: 20
+Transaction valid! Transaction added successfully. Fee: 0.001000
+Transaction ID: tx_1770050931_5815
+
+=== Bitcoin Transaction Simulator ===
+1. Create new transaction
+2. View UTXO set
+3. View mempool
+4. Mine block
+5. Run test scenarios
+6. Exit
+Enter choice: 1
+Enter sender: Alice
+Available balance: 50 BTC
+Enter recipient: Charlie
+Enter amount: 10
+Transaction valid! Transaction added successfully. Fee: 0.001000
+Transaction ID: tx_1770051384_3452
+
+=== Bitcoin Transaction Simulator ===
+1. Create new transaction
+2. View UTXO set
+3. View mempool
+4. Mine block
+5. Run test scenarios
+6. Exit
+Enter choice: 4
+Enter miner name: vg
+
+---------------- MINING START ----------------
+Miner: vg
+Attempting to mine 2 transactions...
+Added UTXO: (tx_1770050931_5815, 0) -> 20 BTC owned by Alice
+Added UTXO: (tx_1770050931_5815, 1) -> 9.999 BTC owned by Bob
+  -> Mined TX: tx_1770050931_5815 (Fee: 0.001)
+Added UTXO: (tx_1770051384_3452, 0) -> 10 BTC owned by Charlie
+Added UTXO: (tx_1770051384_3452, 1) -> 39.999 BTC owned by Alice
+  -> Mined TX: tx_1770051384_3452 (Fee: 0.001)
+Added UTXO: (coinbase_1770051394_290, 0) -> 12.502 BTC owned by vg
+
+Block Mined Successfully!
+  Transactions: 2
+  Block Reward: 12.5
+  Total Fees:   0.002
+  Miner Payout: 12.502 -> vg
+---------------- MINING END ------------------
+
+=== Bitcoin Transaction Simulator ===
+1. Create new transaction
+2. View UTXO set
+3. View mempool
+4. Mine block
+5. Run test scenarios
+6. Exit
+Enter choice: 3
+Mempool Status (0/50)
+
+=== Bitcoin Transaction Simulator ===
+1. Create new transaction
+2. View UTXO set
+3. View mempool
+4. Mine block
+5. Run test scenarios
+6. Exit
+Enter choice: 2
+
+=== Current UTXO Set ===
+Ref: (coinbase_1770051394_290, 0) | Owner: vg | Amount: 12.502 BTC
+Ref: (genesis, 2) | Owner: Charlie | Amount: 20 BTC
+Ref: (genesis, 3) | Owner: David | Amount: 10 BTC
+Ref: (genesis, 4) | Owner: Eve | Amount: 5 BTC
+Ref: (tx_1770050931_5815, 0) | Owner: Alice | Amount: 20 BTC
+Ref: (tx_1770050931_5815, 1) | Owner: Bob | Amount: 9.999 BTC
+Ref: (tx_1770051384_3452, 0) | Owner: Charlie | Amount: 10 BTC
+Ref: (tx_1770051384_3452, 1) | Owner: Alice | Amount: 39.999 BTC
+========================
+
+=== Bitcoin Transaction Simulator ===
+1. Create new transaction
+2. View UTXO set
+3. View mempool
+4. Mine block
+5. Run test scenarios
+6. Exit
+Enter choice: 6

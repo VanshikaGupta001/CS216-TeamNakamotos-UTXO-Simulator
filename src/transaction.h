@@ -39,6 +39,43 @@ struct Transaction {
         tx_id = "tx_" + to_string(time(0)) + "_" + to_string(rand() % 9000 + 1000);
     }
 
+    static Transaction create(string sender, string recipient, double amount, UTXOManager& utxoManager) {
+        vector<pair<string, int>> user_utxos = utxoManager.get_utxos_for_owner(sender);
+        
+        vector<Input> inputs;
+        double current_sum = 0.0;
+        double fee = 0.0; 
+        
+        // Coin Selection 
+        for (auto& ref : user_utxos) {
+            UTXO u = utxoManager.get_utxo(ref.first, ref.second);
+            inputs.emplace_back(ref.first, ref.second, sender);
+            current_sum += u.amount;
+            
+            // Stop if we have enough to cover Amount + Fee
+            if (current_sum >= amount + fee) break;
+        }
+
+        // Validate 
+        if (current_sum < amount + fee) {
+            cout << "Error: Insufficient! Available: " << current_sum 
+                 << " | Required: " << (amount + fee) << endl;
+            return Transaction(); // Return invalid tx
+        }
+
+        // Create Outputs
+        vector<Output> outputs;
+        outputs.emplace_back(amount, recipient); //  Payment
+
+        // Handle Change
+        double change = current_sum - amount - fee;
+        if (change > 0.000001) { // Avoid tiny floating point errors
+            outputs.emplace_back(change, sender);
+        }
+
+        return Transaction(inputs, outputs);
+    }
+
     // {isValid, ErrorMessage}
     pair<bool, string> validate(UTXOManager& utxoManager, const set<pair<string, int>>& mempool_spent) {
         

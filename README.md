@@ -75,6 +75,8 @@ Run the executable:
 
 ### Interactive Menu
 
+![Interactive Menu](image.png)
+
 Upon running, you will see the following options:
 
 1. **Create Transaction:** Manually transfer coins between users (Alice, Bob, Charlie, etc.).

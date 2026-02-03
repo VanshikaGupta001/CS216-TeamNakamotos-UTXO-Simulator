@@ -17,23 +17,19 @@ public:
         set<pair<string, int>> temp_spent_in_this_tx;
 
         for (const auto& in : tx.inputs) {
-            // Existence 
             if (!utxo_manager.exists(in.prev_tx, in.index)) {
                 return {false, "REJECTED: Input UTXO does not exist."};
             }
 
-            // Double-Spend Detection 
             if (temp_spent_in_this_tx.count({in.prev_tx, in.index})) {
                 return {false, "REJECTED: Simple double-spend detected (Same UTXO in one TX)."};
             }
             temp_spent_in_this_tx.insert({in.prev_tx, in.index});
 
-            // Mempool Conflict & Race Attack (First-seen rule)
             if (mempool_spent.count({in.prev_tx, in.index})) {
                 return {false, "REJECTED: Mempool conflict. First-seen rule applied."};
             }
 
-            // Auth: Simulated Signatures 
             UTXO u = utxo_manager.get_utxo(in.prev_tx, in.index);
             if (u.owner != in.owner) {
                 return {false, "REJECTED: Auth Fail (Sender != Owner)."};
@@ -42,12 +38,10 @@ public:
         }
 
         for (const auto& out : tx.outputs) {
-            // No Negative Amounts 
             if (out.amount < 0) return {false, "REJECTED: Negative output amount."};
             output_sum += out.amount;
         }
 
-        // Balance & Fee Calculation
         if (input_sum < output_sum) return {false, "REJECTED: Insufficient funds."};
 
         tx.fee = input_sum - output_sum; 

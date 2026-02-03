@@ -46,7 +46,6 @@ class Mempool{
         }
     }
 
-    // ✅ CRITICAL FIX: Use Transaction::validate() 
     // This handles ALL validation including internal double-spending
     pair<bool, string> validation_result = tx.validate(utxo_manager, spent_utxos);
     
@@ -65,14 +64,10 @@ class Mempool{
     return {true, "Transaction added successfully. " + validation_result.second};
 }
 
-
-
-
     void remove_transaction(string tx_id){
         auto it=transactions.begin();
         while(it!=transactions.end()){
-            if(it->tx_id==tx_id){
-//stop tracking it
+            if(it->tx_id==tx_id){//stop tracking it
                 for (const auto& input : it->inputs) {
                     spent_utxos.erase({input.prev_tx, input.index});
                 }

@@ -14,7 +14,6 @@
 
 using namespace std;
 
-// --- Helper Functions ---
 
 bool is_equal(double a, double b) {
     return std::abs(a - b) < 0.000001;
@@ -30,7 +29,6 @@ void log_test(int id, string name, bool passed, string failure_reason = "") {
 
 }
 
-// Silence console during reset to keep test logs clean
 void reset_genesis(UTXOManager& um) {
     std::ios_base::iostate original_state = std::cout.rdstate();
     std::cout.setstate(std::ios_base::failbit); // Disable cout
@@ -45,7 +43,6 @@ void reset_genesis(UTXOManager& um) {
     std::cout.clear(); // Enable cout
 }
 
-// Helper to create transactions dynamically
 Transaction create_test_tx(UTXOManager& um, string sender, string recipient, double amount, double fee) {
     vector<pair<string, int>> available = um.get_utxos_for_owner(sender);
     vector<Input> inputs;
@@ -61,7 +58,6 @@ Transaction create_test_tx(UTXOManager& um, string sender, string recipient, dou
     vector<Output> outputs;
     outputs.push_back(Output(amount, recipient));
     
-    // Logic for Change Output
     if (total_input_val > (amount + fee)) {
         outputs.push_back(Output(total_input_val - amount - fee, sender));
     }
@@ -69,7 +65,6 @@ Transaction create_test_tx(UTXOManager& um, string sender, string recipient, dou
     return Transaction(inputs, outputs);
 }
 
-// --- Main Test Runner ---
 
 void run_test_scenarios() {
     cout << "\n============================================\n";
@@ -100,10 +95,7 @@ void run_test_scenarios() {
         cout<<endl;
     }
 
-    // ----------------------------------------------------------------
     // Test 2: Multiple Inputs
-    // Reqs: Spend 2 UTXOs (50+20) to send 60
-    // ----------------------------------------------------------------
     {
         UTXOManager um; reset_genesis(um);
         Mempool mp(10);
@@ -131,10 +123,7 @@ void run_test_scenarios() {
             cout<<endl;
     }
 
-    // ----------------------------------------------------------------
     // Test 3: Double-Spend in Same Transaction
-    // Reqs: Reject, Error Message
-    // ----------------------------------------------------------------
     {
         UTXOManager um; reset_genesis(um);
         Mempool mp(10);
@@ -166,10 +155,7 @@ void run_test_scenarios() {
             cout<<endl;
     }
 
-    // ----------------------------------------------------------------
     // Test 4: Mempool Double-Spend
-    // Reqs: TX1 OK, TX2 Rejected (Same UTXO)
-    // ----------------------------------------------------------------
     {
         UTXOManager um; reset_genesis(um);
         Mempool mp(10);
@@ -190,10 +176,7 @@ void run_test_scenarios() {
             cout<<endl;
     }
 
-    // ----------------------------------------------------------------
     // Test 5: Insufficient Funds
-    // Reqs: Reject with "Insufficient funds"
-    // ----------------------------------------------------------------
     {
         UTXOManager um; reset_genesis(um);
         Mempool mp(10);
@@ -213,10 +196,7 @@ void run_test_scenarios() {
             cout<<endl;
     }
 
-    // ----------------------------------------------------------------
     // Test 6: Negative Amount
-    // Reqs: Reject Immediately
-    // ----------------------------------------------------------------
     {
         UTXOManager um; reset_genesis(um);
         Mempool mp(10);
@@ -238,10 +218,7 @@ void run_test_scenarios() {
             cout<<endl;
     }
 
-    // ----------------------------------------------------------------
     // Test 7: Zero Fee Transaction
-    // Reqs: Inputs = Outputs, Accepted
-    // ----------------------------------------------------------------
     {
         UTXOManager um; reset_genesis(um);
         Mempool mp(10);
@@ -263,10 +240,7 @@ void run_test_scenarios() {
             cout<<endl;
     }
 
-    // ----------------------------------------------------------------
     // Test 8: Race Attack Simulation
-    // Reqs: First Seen Rule
-    // ----------------------------------------------------------------
     {
         UTXOManager um; reset_genesis(um);
         Mempool mp(10);
@@ -284,10 +258,7 @@ void run_test_scenarios() {
             cout<<endl;
     }
 
-    // ----------------------------------------------------------------
     // Test 9: Complete Mining Flow
-    // Reqs: Mempool Cleared, UTXOs updated, Miner Paid
-    // ----------------------------------------------------------------
     {
         UTXOManager um; reset_genesis(um);
         Mempool mp(10);
@@ -317,10 +288,7 @@ void run_test_scenarios() {
             cout<<endl;
     }
 
-    // ----------------------------------------------------------------
     // Test 10: Unconfirmed Chain
-    // Reqs: Reject spending unmined UTXOs
-    // ----------------------------------------------------------------
     {
         UTXOManager um; reset_genesis(um);
         Mempool mp(10);

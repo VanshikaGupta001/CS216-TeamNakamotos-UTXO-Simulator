@@ -1,21 +1,13 @@
 #include <iostream>
 #include <vector>
 #include <string>
-
-
 #include"utxo_manager.h"
-
 #include"mempool.h"
-
 #include"transaction.h"
-
 #include "miner.h"
-
 #include "tests.h"
 
 using namespace std;
-
-
 
 void initialize_genesis_block(UTXOManager& utxo_manager) {
     utxo_manager.add_utxo("genesis", 0, 50.0, "Alice");    

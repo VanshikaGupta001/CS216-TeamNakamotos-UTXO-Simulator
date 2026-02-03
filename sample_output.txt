@@ -1,3 +1,8 @@
+Added UTXO: (genesis, 0) -> 50 BTC owned by Alice
+Added UTXO: (genesis, 1) -> 30 BTC owned by Bob
+Added UTXO: (genesis, 2) -> 20 BTC owned by Charlie
+Added UTXO: (genesis, 3) -> 10 BTC owned by David
+Added UTXO: (genesis, 4) -> 5 BTC owned by Eve
 Genesis UTXOs initialized successfully.
 
 === Bitcoin Transaction Simulator ===
@@ -8,12 +13,26 @@ Genesis UTXOs initialized successfully.
 5. Run test scenarios
 6. Exit
 Enter choice: 1
-Enter sender: Bob
-Available balance: 30 BTC
-Enter recipient: Alice
+Enter sender: Alice
+Available balance: 50 BTC
+Enter recipient: Eve
 Enter amount: 20
-Transaction valid! Transaction added successfully. Fee: 0.001000
-Transaction ID: tx_1770050931_5815
+Transaction valid! Transaction added successfully. Valid. Fee: 0.001000
+Transaction ID: tx_1770117380_2479
+
+=== Bitcoin Transaction Simulator ===
+1. Create new transaction
+2. View UTXO set
+3. View mempool
+4. Mine block
+5. Run test scenarios
+6. Exit
+Enter choice: 1
+Enter sender: Eve
+Available balance: 5 BTC
+Enter recipient: Bob
+Enter amount: 10
+Transaction rejected: Rule 3 Fail: Insufficient funds (Inputs < Outputs).
 
 === Bitcoin Transaction Simulator ===
 1. Create new transaction
@@ -26,9 +45,19 @@ Enter choice: 1
 Enter sender: Alice
 Available balance: 50 BTC
 Enter recipient: Charlie
-Enter amount: 10
-Transaction valid! Transaction added successfully. Fee: 0.001000
-Transaction ID: tx_1770051384_3452
+Enter amount: 40
+Transaction rejected: Rule 5 Fail: UTXO is already pending in Mempool.
+
+=== Bitcoin Transaction Simulator ===
+1. Create new transaction
+2. View UTXO set
+3. View mempool
+4. Mine block
+5. Run test scenarios
+6. Exit
+Enter choice: 3
+Mempool Status (1/50)
+TXID: tx_1770117380_2479 | Fee: 0.001
 
 === Bitcoin Transaction Simulator ===
 1. Create new transaction
@@ -38,24 +67,21 @@ Transaction ID: tx_1770051384_3452
 5. Run test scenarios
 6. Exit
 Enter choice: 4
-Enter miner name: vg
+Enter miner name: John
 
 ---------------- MINING START ----------------
-Miner: vg
-Attempting to mine 2 transactions...
-Added UTXO: (tx_1770050931_5815, 0) -> 20 BTC owned by Alice
-Added UTXO: (tx_1770050931_5815, 1) -> 9.999 BTC owned by Bob
-  -> Mined TX: tx_1770050931_5815 (Fee: 0.001)
-Added UTXO: (tx_1770051384_3452, 0) -> 10 BTC owned by Charlie
-Added UTXO: (tx_1770051384_3452, 1) -> 39.999 BTC owned by Alice
-  -> Mined TX: tx_1770051384_3452 (Fee: 0.001)
-Added UTXO: (coinbase_1770051394_290, 0) -> 12.502 BTC owned by vg
+Miner: John
+Attempting to mine 1 transactions...
+Added UTXO: (tx_1770117380_2479, 0) -> 20 BTC owned by Eve
+Added UTXO: (tx_1770117380_2479, 1) -> 29.999 BTC owned by Alice
+  -> Mined TX: tx_1770117380_2479 (Fee: 0.001)
+Added UTXO: (coinbase_1770117461_628, 0) -> 12.501 BTC owned by John
 
 Block Mined Successfully!
-  Transactions: 2
+  Transactions: 1
   Block Reward: 12.5
-  Total Fees:   0.002
-  Miner Payout: 12.502 -> vg
+  Total Fees:   0.001
+  Miner Payout: 12.501 -> John
 ---------------- MINING END ------------------
 
 === Bitcoin Transaction Simulator ===
@@ -78,15 +104,60 @@ Mempool Status (0/50)
 Enter choice: 2
 
 === Current UTXO Set ===
-Ref: (coinbase_1770051394_290, 0) | Owner: vg | Amount: 12.502 BTC
+Ref: (coinbase_1770117461_628, 0) | Owner: John | Amount: 12.501 BTC
+Ref: (genesis, 1) | Owner: Bob | Amount: 30 BTC
 Ref: (genesis, 2) | Owner: Charlie | Amount: 20 BTC
 Ref: (genesis, 3) | Owner: David | Amount: 10 BTC
 Ref: (genesis, 4) | Owner: Eve | Amount: 5 BTC
-Ref: (tx_1770050931_5815, 0) | Owner: Alice | Amount: 20 BTC
-Ref: (tx_1770050931_5815, 1) | Owner: Bob | Amount: 9.999 BTC
-Ref: (tx_1770051384_3452, 0) | Owner: Charlie | Amount: 10 BTC
-Ref: (tx_1770051384_3452, 1) | Owner: Alice | Amount: 39.999 BTC
+Ref: (tx_1770117380_2479, 0) | Owner: Eve | Amount: 20 BTC
+Ref: (tx_1770117380_2479, 1) | Owner: Alice | Amount: 29.999 BTC
 ========================
+
+=== Bitcoin Transaction Simulator ===
+1. Create new transaction
+2. View UTXO set
+3. View mempool
+4. Mine block
+5. Run test scenarios
+6. Exit
+Enter choice: 5
+Running mandatory test scenarios...
+
+============================================
+      RUNNING 10 STRICT TEST SCENARIOS
+============================================
+Test 1 Data: Fee=0.001 | Outputs=2 | Status=OK
+[PASS] Test 1: Basic Valid Transaction
+
+Test 2 Data: Inputs Used=2 | Amount=60
+[PASS] Test 2: Multiple Inputs Aggregation
+
+Test 3 Data: Result=Rejected | Msg="Rule 2 Fail: Internal double-spend detected (same UTXO used twice)."
+[PASS] Test 3: Double-Spend in Same Transaction
+
+Test 4 Data: TX1=1 | TX2=0 | Error="Rule 5 Fail: UTXO is already pending in Mempool."
+[PASS] Test 4: Mempool Double-Spend
+
+Test 5 Data: Result=0 | Msg="Rule 3 Fail: Insufficient funds (Inputs < Outputs)."
+[PASS] Test 5: Insufficient Funds
+
+Test 6 Data: Result=0 | Msg="Rule 4 Fail: Negative output amount detected."
+[PASS] Test 6: Negative Amount
+
+Test 7 Data: Fee=0 | Result=1
+[PASS] Test 7: Zero Fee Transaction
+
+Test 8 Data: TX1(LowFee)=1 | TX2(HighFee)=0
+[PASS] Test 8: Race Attack (First-Seen Rule)
+
+Test 9 Data: MempoolEmpty=true | BobBal=40 | MinerBal=12.5
+[PASS] Test 9: Complete Mining Flow
+
+Test 10 Data: Spending Unconfirmed UTXO Result=false
+[PASS] Test 10: Unconfirmed Chain
+
+============================================
+
 
 === Bitcoin Transaction Simulator ===
 1. Create new transaction

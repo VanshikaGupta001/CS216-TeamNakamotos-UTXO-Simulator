@@ -1,0 +1,2 @@
+#ifndef MEMPOOL
+#define MEMPOOL

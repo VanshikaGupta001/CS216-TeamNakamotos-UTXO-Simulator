@@ -7,6 +7,11 @@
 #include <ctime>
 #include <cstdlib>
 
+
+#ifndef MINER_H   
+#define MINER_H
+
+
 #ifndef UTXO_MANAGER
 #define UTXO_MANAGER
 #include"utxo_manager.h"
@@ -23,9 +28,11 @@
 #endif
 
 
+
+
 using namespace std;
 
-string generate_tx_id() {
+ string generate_tx_id() {
     return "tx_" + to_string(time(0)) + "_" + to_string(rand() % 9000 + 1000);
 }
 
@@ -93,3 +100,5 @@ void mine_block(Mempool& mempool, UTXOManager& utxo_manager, string miner_addres
     cout << "  Miner Payout: " << total_payout << " -> " << miner_address << endl;
     cout << "---------------- MINING END ------------------" << endl;
 }
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef MEMPOOL
+#define MEMPOOL
+
 #include <iostream>
 #include <vector>
 #include <string>
@@ -5,15 +8,16 @@
 #include <algorithm> 
 #include <map>
 
-#ifndef UTXO_MANAGER
-#define UTXO_MANAGER
-#include"utxo_manager.h"
-#endif
 
-#ifndef TRANSACTION
-#define TRANSACTION
+// #ifndef UTXO_MANAGER
+// #define UTXO_MANAGER
+#include"utxo_manager.h"
+// #endif
+
+// #ifndef TRANSACTION
+// #define TRANSACTION
 #include"transaction.h"
-#endif
+// #endif
 
 
 using namespace std;
@@ -29,55 +33,37 @@ class Mempool{
 
 
     
-    pair<bool,string> add_transaction(Transaction tx,UTXOManager& utxo_manager){
-        if(transactions.size()>=max_size){
-            return{false,"Mempool is full"};
-        }
-
-        for(auto &it:transactions){
-            if(it.tx_id==tx.tx_id){
-                return {false,"transaction id aldready in mempool"};
-            }
-        }
-
-        double input_sum=0.0;
-        double output_sum=0.0;
-
-        for(auto &input:tx.inputs){
-            if(!utxo_manager.exists(input.prev_tx,input.index)){
-                return{false,"input utxo does not exist in utxo set"};
-            }
-
-            if(spent_utxos.count({input.prev_tx,input.index})){
-                return{false,"utxo aldready spent in mempool, double spending attempt."};
-            }
-            UTXO u = utxo_manager.get_utxo(input.prev_tx, input.index);
-            if(u.owner!=input.owner){
-                return {false, "not owner of input UTXO"};
-            }
-            input_sum+=u.amount;
-
-        }
-
-        for (const auto& output : tx.outputs) {
-            if (output.amount < 0) return {false, "Invalid output amount"};
-            output_sum += output.amount;
-        }
-
-        if (input_sum < output_sum) {
-            return {false, "insufficient funds: Inputs < Outputs"};
-        }
-
-        tx.fee = input_sum - output_sum;
-        transactions.push_back(tx);
-
-        for (const auto& input : tx.inputs) {
-            spent_utxos.insert({input.prev_tx, input.index});
-        }
-
-        return {true, "Transaction added successfully. Fee: " + to_string(tx.fee)};
-
+  pair<bool, string> add_transaction(Transaction& tx, UTXOManager& utxo_manager) {
+    // Check mempool capacity
+    if (transactions.size() >= max_size) {
+        return {false, "Mempool is full"};
     }
+
+    // Check for duplicate transaction ID
+    for (auto& it : transactions) {
+        if (it.tx_id == tx.tx_id) {
+            return {false, "Transaction ID already in mempool"};
+        }
+    }
+
+    // ✅ CRITICAL FIX: Use Transaction::validate() 
+    // This handles ALL validation including internal double-spending
+    pair<bool, string> validation_result = tx.validate(utxo_manager, spent_utxos);
+    
+    if (!validation_result.first) {
+        return validation_result;
+    }
+
+    // Add to mempool
+    transactions.push_back(tx);
+
+    // Track spent UTXOs
+    for (const auto& input : tx.inputs) {
+        spent_utxos.insert({input.prev_tx, input.index});
+    }
+
+    return {true, "Transaction added successfully. " + validation_result.second};
+}
 
 
 
@@ -131,3 +117,4 @@ sort(sorted_txs.begin(), sorted_txs.end(), [](const Transaction& a, const Transa
         
     }
 };
+#endif

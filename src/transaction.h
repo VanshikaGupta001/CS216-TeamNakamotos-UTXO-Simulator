@@ -1,13 +1,17 @@
+
+#ifndef TRANSACTION
+#define TRANSACTION
+
 #include <iostream>
 #include <vector>
 #include <string>
 #include <set>
 #include <ctime>
 #include <cstdlib>
-#ifndef UTXO_MANAGER
-#define UTXO_MANAGER
+
+
 #include"utxo_manager.h"
-#endif
+
 
 using namespace std;
 
@@ -153,3 +157,5 @@ struct Transaction {
         cout << "}" << endl;
     }
 };
+
+#endif

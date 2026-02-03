@@ -6,6 +6,9 @@
 
 using namespace std;
 
+#ifndef UTXO_MANAGER
+#define UTXO_MANAGER
+
 struct UTXO {
     double amount;
     string owner;
@@ -78,3 +81,4 @@ public:
         cout << "========================" << endl;
     }
 };
+#endif

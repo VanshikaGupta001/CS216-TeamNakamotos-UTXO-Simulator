@@ -2,26 +2,20 @@
 #include <vector>
 #include <string>
 
-#ifndef UTXO_MANAGER
-#define UTXO_MANAGER
+
 #include"utxo_manager.h"
-#endif
 
-#ifndef MEMPOOL
-#define MEMPOOL
 #include"mempool.h"
-#endif
 
-#ifndef TRANSACTION
-#define TRANSACTION
 #include"transaction.h"
-#endif
 
-#ifndef MINER
-#define MINER
 #include "miner.h"
-#endif
+
+#include "tests.h"
+
 using namespace std;
+
+
 
 void initialize_genesis_block(UTXOManager& utxo_manager) {
     utxo_manager.add_utxo("genesis", 0, 50.0, "Alice");    
@@ -98,7 +92,7 @@ int main() {
             mine_block(mempool, utxo_manager, miner); 
         } else if (choice == 5) {
             cout << "Running mandatory test scenarios..." << endl;
-            //todo
+            run_test_scenarios();
         } else if (choice == 6) {
             break;
         } else {

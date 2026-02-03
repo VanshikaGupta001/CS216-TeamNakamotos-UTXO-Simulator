@@ -1,9 +1,9 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include"utxo_manager.h"
-#include"mempool.h"
-#include"transaction.h"
+#include "utxo_manager.h"
+#include "mempool.h"
+#include "transaction.h"
 #include "miner.h"
 #include "tests.h"
 
